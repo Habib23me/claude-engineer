@@ -36,7 +36,13 @@ import os
 import sys
 from pathlib import Path
 
+import certifi
 from dotenv import load_dotenv
+
+# Fix SSL certificate verification on macOS with Homebrew Python.
+# The system OpenSSL doesn't know where to find CA certs by default.
+if not os.environ.get("SSL_CERT_FILE"):
+    os.environ["SSL_CERT_FILE"] = certifi.where()
 
 # Load .env before importing modules that read env vars at import time.
 # arcade_config.py reads ARCADE_API_KEY and ARCADE_GATEWAY_SLUG at module
